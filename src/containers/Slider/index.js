@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import { useData } from "../../contexts/DataContext";
 import { getMonth } from "../../helpers/Date";
-
 import "./style.scss";
+
+
 
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
-    new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
+    new Date(evtA.date) < new Date(evtB.date) ? 1 : -1 // inversion -1 1
   );
   const nextCard = () => {
     setTimeout(
-      () => setIndex(index < byDateDesc.length ? index + 1 : 0),
+      () => setIndex(index < byDateDesc.length-1 ? index + 1 : 0), // changement de la condition en faisant length-1 car state commence a 0
       5000
     );
   };
@@ -34,7 +35,7 @@ const Slider = () => {
               <div className="SlideCard__description">
                 <h3>{event.title}</h3>
                 <p>{event.description}</p>
-                <div>{getMonth(new Date(event.date))}</div>
+                <div>{getMonth((new Date(event.date)))}</div>
               </div>
             </div>
           </div>
@@ -42,10 +43,10 @@ const Slider = () => {
             <div className="SlideCard__pagination">
               {byDateDesc.map((_, radioIdx) => (
                 <input
-                  key={`${event.id}`}
+                  key={event.id} 
                   type="radio"
                   name="radio-button"
-                  checked={idx === radioIdx}
+                  checked = {index === radioIdx} // chgtm idx par index
                 />
               ))}
             </div>
